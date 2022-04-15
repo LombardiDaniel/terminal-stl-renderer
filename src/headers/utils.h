@@ -115,11 +115,11 @@ namespace utils {
         }
 
         static void setDebug() {
-            DEBUG = 1;
+            DEBUG = true;
         }
 
         static void unsetDebug() {
-            DEBUG = 0;
+            DEBUG = false;
         }
 
         void setPriority(unsigned short priority) {

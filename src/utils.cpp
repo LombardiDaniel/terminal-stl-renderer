@@ -12,7 +12,7 @@
 
 namespace utils {
 
-    unsigned short int Logger::DEBUG = 0;
+    bool Logger::DEBUG = 0;
 
     bool fileExists(const std::string& filePath) {
         struct stat buffer;

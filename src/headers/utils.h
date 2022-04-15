@@ -19,16 +19,16 @@ namespace utils {
 
     const std::string currentDateTime();
 
+    bool fileExists(const std::string& filePath);
+
+    int ourDistribution(int min, int max);
+
     template <typename T>
     T modulus(T val) {
         if (val >= 0)
             return val;
         return -val;
     }
-
-    bool fileExists(const std::string& filePath);
-
-    int ourDistribution(int min, int max);
 
     template <typename T = char*>
     void _insert_color(char* original, unsigned int pos, T new_insertion) {
@@ -47,7 +47,7 @@ namespace utils {
     class Logger {
     public:
         enum logPriority : unsigned short {Debug = 0, Info, Warning, Error, Critical};
-        static unsigned short int DEBUG;
+        static bool DEBUG;
 
     private:
         unsigned short _priority;

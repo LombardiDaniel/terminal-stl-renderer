@@ -13,15 +13,16 @@
 #include <string.h>
 
 
-namespace utils {
+#define PI                                          3.141592
 
-    const float PI = 3.141592f;
+
+namespace utils {
 
     const std::string currentDateTime();
 
     bool fileExists(const std::string& filePath);
 
-    int ourDistribution(int min, int max);
+    std::string getNextFileName(const std::string sDir, std::string filePattern);
 
     template <typename T>
     T modulus(T val) {
@@ -79,7 +80,7 @@ namespace utils {
             if (Logger::DEBUG)
                 loggingPath = this->_logFilePath;
             else
-                loggingPath = "TermShooter.log";
+                loggingPath = "TermRenderer.log\0";
 
             pFile = fopen((const char*) loggingPath.c_str(), "a+");
 
@@ -94,7 +95,7 @@ namespace utils {
 
     public:
         Logger() {}
-        Logger(char* loggerName, char* logFilePath, unsigned short priority=Info) {
+        Logger(char *loggerName, char *logFilePath, unsigned short priority=Error) {
 
             this->_prefix = loggerName;
             this->_logFilePath = std::string(logFilePath);
@@ -115,11 +116,11 @@ namespace utils {
         }
 
         static void setDebug() {
-            DEBUG = true;
+            Logger::DEBUG = true;
         }
 
         static void unsetDebug() {
-            DEBUG = false;
+            Logger::DEBUG = false;
         }
 
         void setPriority(unsigned short priority) {

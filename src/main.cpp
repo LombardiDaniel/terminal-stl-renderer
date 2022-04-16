@@ -5,11 +5,12 @@
 #include "headers/engine.h"
 #include "headers/utils.h"
 
+
 #define DEBUG                                   0
 
 
 int main(int argc, char const *argv[]) {
-    
+
     if (DEBUG)
         utils::Logger::setDebug();
     else

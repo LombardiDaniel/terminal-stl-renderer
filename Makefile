@@ -1,25 +1,69 @@
-# This makefile is made for the `mingw32-make`, NOT for gnu-make
+########################################################################
+####################### Makefile Template ##############################
+########################################################################
 
-GCCFLAGS=-std=c++17
-INCLUDEDLLFLAGS=-static-libstdc++ -static-libgcc
-DISABLEWARN=-Wwrite-strings
-LINKERDISABLEWARN=--disable-stdcall-fixup
+# Compiler settings - Can be customized.
+CC = g++
+CXXFLAGS = -std=c++17 -Wall -static-libstdc++ -static-libgcc -Wwrite-strings -g -lm
+LDFLAGS = --disable-stdcall-fixup
 
-TermRendererSTL.exe: main.o engine.o utils.o
-	g++ $(GCCFLAGS) main.o engine.o utils.o -o TermRendererSTL.exe C:\Windows\System32\winmm.dll $(INCLUDEDLLFLAGS) $(LINKERDISABLEWARN) $(DISABLEWARN)
+# Makefile settings - Can be customized.
+APPNAME = TermRendererSTL
+EXT = .cpp
+SRCDIR = src
+OBJDIR = obj
 
-main.o: src/main.cpp
-	g++ $(GCCFLAGS) -c src/main.cpp $(DISABLEWARN)
+############## Do not change anything from here downwards! #############
+SRC = $(wildcard $(SRCDIR)/*$(EXT))
+OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
+DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
+# UNIX-based OS variables & settings
+RM = rm
+DELOBJ = $(OBJ)
+# Windows OS variables & settings
+DEL = del
+EXE = .exe
+WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
-engine.o: src/engine.cpp src/headers/engine.h
-	g++ $(GCCFLAGS) -c src/engine.cpp $(DISABLEWARN)
+########################################################################
+####################### Targets beginning here #########################
+########################################################################
 
-utils.o: src/utils.cpp src/headers/utils.h
-	g++ $(GCCFLAGS) -c src/utils.cpp $(DISABLEWARN)
+all: $(APPNAME)
 
+# Builds the app
+$(APPNAME): $(OBJ)
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Creates the dependecy rules
+%.d: $(SRCDIR)/%$(EXT)
+	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+
+# Includes all .h files
+-include $(DEP)
+
+# Building rule for .o files and its .c/.cpp in combination with all .h
+$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
+	$(CC) $(CXXFLAGS) -o $@ -c $<
+
+################### Cleaning rules for Unix-based OS ###################
+# Cleans complete project
+.PHONY: clean
 clean:
-	del *.o
-	del *.exe
+	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
 
-cleanAll:
-	del *.o src\headers\*.h.gch *.log
+# Cleans only all files with the extension .d
+.PHONY: cleandep
+cleandep:
+	$(RM) $(DEP)
+
+#################### Cleaning rules for Windows OS #####################
+# Cleans complete project
+.PHONY: cleanw
+cleanw:
+	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
+
+# Cleans only all files with the extension .d
+.PHONY: cleandepw
+cleandepw:
+	$(DEL) $(DEP)

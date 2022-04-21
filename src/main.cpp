@@ -6,7 +6,7 @@
 #include "headers/utils.h"
 
 
-#define DEBUG                                   0
+#define DEBUG                                   1
 
 
 int main(int argc, char const *argv[]) {
@@ -15,7 +15,6 @@ int main(int argc, char const *argv[]) {
         utils::Logger::setDebug();
     else
         utils::Logger::unsetDebug();
-
 
     // // The overlays were made with these dimensions in mind, do NOT change
     // int nScreenW = 120;

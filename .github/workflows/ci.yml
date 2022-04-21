@@ -1,4 +1,4 @@
-name: C/C++ Compile and Test - CI
+name: Compile, Test and Lint
 
 on:
   push:

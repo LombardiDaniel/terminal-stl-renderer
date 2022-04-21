@@ -16,7 +16,9 @@ jobs:
         uses: egor-tensin/setup-mingw@v2
 
       - name: Compile
-        run: mingw32-make
+        run: |
+          mkdir obj
+          mingw32-make
 
 
   lint_code_base:
